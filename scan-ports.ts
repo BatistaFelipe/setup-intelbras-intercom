@@ -12,11 +12,13 @@ const scanPort = (
     socket.setTimeout(socket_timeout);
     try {
       socket.connect(port, host, () => {
+        socket.removeAllListeners();
         socket.destroy();
         resolve({ message: `${host}:${port}`, success: true });
       });
 
       socket.on("error", (error: any) => {
+        socket.removeAllListeners();
         socket.destroy();
         resolve({
           message: `${host}:${port} Erro: ${error.message}`,
@@ -25,6 +27,7 @@ const scanPort = (
       });
 
       socket.on("timeout", () => {
+        socket.removeAllListeners();
         socket.destroy();
         resolve({ message: `${host}:${port} Timeout`, success: false });
       });
