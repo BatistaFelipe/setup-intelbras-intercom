@@ -1,0 +1,27 @@
+{
+  "name": "setup-intelbras-intercom",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "net": "^1.0.2",
+    "urllib": "^4.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10"
+  }
+}
