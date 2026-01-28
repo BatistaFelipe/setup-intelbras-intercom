@@ -58,10 +58,16 @@ const saveToFile = async (filename: string, data: any) => {
     );
     return;
   }
-  const objResult: SetTimeoutSipResult[] = JSON.parse(setTimeoutSip.message);
-  for (const result of objResult["result"]) {
+  try {
+    const objResult: SetTimeoutSipResult[] = JSON.parse(setTimeoutSip.message);
+    for (const result of objResult["result"]) {
+      console.log(
+        `✅ SET_TIMEOUT_SIP - host: ${result.host} status: ${result.status}`,
+      );
+    }
+  } catch (error) {
     console.log(
-      `✅ SET_TIMEOUT_SIP - host: ${result.host} status: ${result.status}`,
+      `❌ SET_TIMEOUT_SIP - Erro: ${error.message || "Erro desconhecido"}`,
     );
   }
 })();
