@@ -59,10 +59,12 @@ const saveToFile = async (filename: string, data: any) => {
     return;
   }
   try {
-    const objResult: SetTimeoutSipResult[] = JSON.parse(setTimeoutSip.message);
-    for (const result of objResult["result"]) {
+    const data = JSON.parse(setTimeoutSip.message);
+    const results: SetTimeoutSipResult[] = data.result || [];
+
+    for (const item of results) {
       console.log(
-        `✅ SET_TIMEOUT_SIP - host: ${result.host} status: ${result.status}`,
+        `✅ SET_TIMEOUT_SIP - host: ${item.host} status: ${item.status}`,
       );
     }
   } catch (error) {
