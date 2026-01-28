@@ -17,7 +17,7 @@ const saveToFile = async (filename: string, data: any) => {
   } catch (error: any) {
     return {
       message: error.message || "Erro ao salvar arquivo",
-      success: true,
+      success: false,
     };
   }
 };
