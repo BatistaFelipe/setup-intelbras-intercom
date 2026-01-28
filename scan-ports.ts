@@ -41,26 +41,25 @@ const scanPort = (
 };
 
 // testa uma lista de portas de um host e retorna uma lista com os liberados
-const scanPortList = (
+const scanPortList = async (
   host: string,
   startPort: number,
   endPort: number,
 ): Promise<DefaultResponse> => {
-  return new Promise(async (resolve) => {
-    let hosts: string[] = [];
+  const portRange = Array.from(
+    { length: endPort - startPort + 1 },
+    (_, i) => startPort + i,
+  );
 
-    for (let port: number = startPort; port <= endPort; port++) {
-      const response: DefaultResponse = await scanPort(host, port);
-      if (response.success) {
-        hosts.push(response.message);
-      }
-    }
+  const promises = portRange.map((port) => scanPort(host, port));
+  const results = await Promise.all(promises);
 
-    resolve({
-      message: JSON.stringify({ hosts: hosts }, null, 2),
-      success: true,
-    });
-  });
+  const openPorts = results.filter((r) => r.success).map((r) => r.message);
+
+  return {
+    message: JSON.stringify({ hosts: openPorts }, null, 2),
+    success: true,
+  };
 };
 
 export default scanPortList;
