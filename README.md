@@ -14,32 +14,43 @@ O fluxo de execução segue estas etapas:
 
 Antes de começar, você precisará:
 
-* **Node.js**: Versão v24.13.0 (conforme definido no `package.json`).
-* **NVM**: Para gerenciar a versão correta do Node.
+- **Node.js**: Versão v24.13.0 (conforme definido no `package.json`).
+- **NVM**: Para gerenciar a versão correta do Node.
 
 ## ⚙️ Instalação e Configuração
 
 Siga os passos abaixo para preparar o ambiente:
 
 1. **Selecionar versão do Node**:
+
+**Linux/MacOS**
+
 ```bash
 nvm use
 ```
 
+**Windows (PowerShell)**
+
+```
+nvm use $(Get-Content .nvmrc)
+```
+
 2. **Instalar dependências**:
+
 ```bash
 npm install
 ```
 
 3. **Criar pasta de dados**:
-O script salva os resultados intermediários em arquivos JSON. Crie a pasta necessária:
+   O script salva os resultados intermediários em arquivos JSON. Crie a pasta necessária:
 
 ```bash
 mkdir data
 ```
 
 4. **Configurar Variáveis de Ambiente**:
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+   Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
 ```env
 INTELBRAS_USER=seu_usuario
 INTELBRAS_PWD=sua_senha
@@ -47,11 +58,10 @@ INTELBRAS_HOST=seu_host_ou_ip
 START_PORT=8084
 END_PORT=8099
 SIP_TIMEOUT=60
-
 ```
 
-
 ## 🏃 Execução
+
 Para rodar o projeto em modo de desenvolvimento:
 
 ```bash
@@ -67,9 +77,9 @@ npm start
 
 ## 📦 Tecnologias Utilizadas
 
-* **TypeScript**: Linguagem base para maior segurança e tipagem.
-* **Urllib**: Para realizar as requisições HTTP Digest Auth aos dispositivos.
-* **Net (Socket)**: Para o escaneamento de portas de rede.
-* **Dotenv**: Gestão de variáveis de ambiente.
+- **TypeScript**: Linguagem base para maior segurança e tipagem.
+- **Urllib**: Para realizar as requisições HTTP Digest Auth aos dispositivos.
+- **Net (Socket)**: Para o escaneamento de portas de rede.
+- **Dotenv**: Gestão de variáveis de ambiente.
 
 ---
