@@ -27,14 +27,19 @@ const getConfigSip = async (filename: string): Promise<DefaultResponse> => {
     const obj: ScanResult = JSON.parse(fileData);
 
     const promises = obj.hosts.map(async (host) => {
-      const url: string = `http://${host}/cgi-bin/configManager.cgi?action=getConfig&name=SIP.RegExpiration`;
-      const { data, res } = await request(url, { ...options, method: "GET" });
+      try {
+        const url: string = `http://${host}/cgi-bin/configManager.cgi?action=getConfig&name=SIP.RegExpiration`;
+        const { data, res } = await request(url, { ...options, method: "GET" });
 
-      if (res.status === 200 && data) {
-        const sipInfo: SipInfo = parseIntelbrasResponse(data.toString());
-        if (sipInfo.time) return { host, sipTimeout: sipInfo.time };
+        if (res.status === 200 && data) {
+          const sipInfo: SipInfo = parseIntelbrasResponse(data.toString());
+          if (sipInfo.time) return { host, sipTimeout: sipInfo.time };
+        }
+        return null;
+      } catch (error: any) {
+        console.log(`⚠️  Erro no host ${host}: ${error.code || error.message}`);
+        return null;
       }
-      return null;
     });
     const results = await Promise.all(promises);
     const hosts = results.filter((h): h is HostObject => h !== null);

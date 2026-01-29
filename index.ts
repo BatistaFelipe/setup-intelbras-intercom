@@ -48,6 +48,12 @@ const saveToFile = async (filename: string, data: any) => {
   // lê todos que tem acesso e busca o registro de table.SIP.RegExpiration
   const timeoutSipList: DefaultResponse =
     await Intelbras.getConfigSip(SCAN_PORTS_FILE);
+  if (!timeoutSipList.success) {
+    console.log(
+      `❌ ${HOST}: Erro ao buscar SIP.RegExpiration! - ${timeoutSipList.message}`,
+    );
+    return;
+  }
   statusSave = await saveToFile(DATA_API_FILE, timeoutSipList.message);
   if (!statusSave.success) {
     console.log(
