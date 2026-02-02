@@ -1,84 +1,72 @@
-# Setup Intelbras Intercom
+# Setup Intercom (Hikvision & Intelbras)
 
-Este projeto automatiza a configuração do tempo de expiração de registro SIP (`SIP.RegExpiration`) em múltiplos interfones Intelbras simultaneamente. O script realiza um scan de portas, identifica os dispositivos ativos e aplica a configuração de timeout desejada.
+Este projeto automatiza a configuração do tempo de expiração de registro SIP em múltiplos interfones Hikvision e Intelbras. O script realiza um scan de portas, identifica os dispositivos ativos e aplica a configuração de timeout desejada via APIs específicas de cada fabricante.
 
-## 🚀 Como funciona
+## 🛠️ Tecnologias Utilizadas
 
-O fluxo de execução segue estas etapas:
+- **Node.js & TypeScript**.
+- **Winston**: Logs estruturados com persistência em arquivo.
+- **p-limit**: Controle de concorrência para evitar sobrecarga na rede.
+- **Urllib**: Cliente HTTP com suporte a autenticação Digest (necessário para ambos os fabricantes).
 
-1. **Port Scan**: Varre um range de portas em um host específico para encontrar dispositivos ativos.
-2. **Consulta de Configuração**: Acessa cada dispositivo encontrado para verificar o timeout SIP atual.
-3. **Atualização**: Caso o timeout seja superior ao limite definido, o script envia um comando para ajustá-lo para o valor configurado (ex: 60 segundos).
+## 📂 Estrutura do Projeto
 
-## 🛠️ Pré-requisitos
-
-Antes de começar, você precisará:
-
-- **Node.js**: Versão v24.13.0 (conforme definido no `package.json`).
-- **NVM**: Para gerenciar a versão correta do Node.
-
-## ⚙️ Instalação e Configuração
-
-Siga os passos abaixo para preparar o ambiente:
-
-1. **Selecionar versão do Node**:
-
-**Linux/MacOS**
-
-```bash
-nvm use
-```
-
-**Windows (PowerShell)**
+```text
+src/
+├── services/     # Integração Hikvision, Intelbras e Scan de portas
+├── types.ts      # Interfaces e definições TypeScript
+├── utils.ts      # Logger e utilitários de erro
+└── index.ts      # Ponto de entrada (executa fluxo para ambos fabricantes)
+data/             # JSONs gerados e logs do sistema
 
 ```
-nvm use $(Get-Content .nvmrc)
-```
 
-2. **Instalar dependências**:
+## 🚀 Como Executar
+
+### 1. Selecionar versão do Node
+
+Use o comando `nvm use` conforme o seu sistema operacional para alinhar a versão do Node.js.
+
+### 2. Instalação
 
 ```bash
 npm install
 ```
 
-3. **Criar pasta de dados**:
-   O script salva os resultados intermediários em arquivos JSON. Crie a pasta necessária:
+### 3. Configuração
 
-```bash
-mkdir data
-```
-
-4. **Configurar Variáveis de Ambiente**:
-   Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+Crie um arquivo `.env` na raiz do projeto com as credenciais de ambos os fabricantes:
 
 ```env
-INTELBRAS_USER=seu_usuario
-INTELBRAS_PWD=sua_senha
-INTELBRAS_HOST=seu_host_ou_ip
+# Configurações Gerais
 START_PORT=8084
 END_PORT=8099
-SIP_TIMEOUT=60
+DST_HOST='192.168.1.100'
+
+# HIKVISION
+HIKVISION_USER='admin'
+HIKVISION_PWD='senha_hikvision'
+SIP_TIMEOUT_HIKVISION=15
+SIP_ID=1
+SIP_ENABLE=true
+SIP_SERVER='servidor_sip'
+SIP_SERVER_PORT=porta_sip
+SIP_PASSWORD='senha_ramal_sip'
+
+# INTELBRAS
+INTELBRAS_USER='admin'
+INTELBRAS_PWD='senha_intelbras'
+SIP_TIMEOUT_INTELBRAS=60
 ```
 
 ## 🏃 Execução
 
-O endereço de destino pode ser definido de duas formas, seguindo esta ordem de prioridade:
-
-1. **Argumento CLI** (sobrescreve tudo)
-2. **Variável de Ambiente** (`.env`)
+O sistema agora processa sequencialmente dispositivos Hikvision e, em seguida, Intelbras.
 
 ### Uso via Terminal
 
 ```bash
 npm run dev -- -d 192.168.1.50
-```
-
-### Uso via .env
-
-Se nenhum argumento for passado, o sistema utiliza o valor definido no arquivo `.env`:
-
-```env
-INTELBRAS_HOST=192.168.1.50
 ```
 
 ### Parâmetros
@@ -88,9 +76,4 @@ INTELBRAS_HOST=192.168.1.50
 | `-d, --dst-host` | Define o host de destino.       | Valor do `.env` |
 | `--help`         | Mostra os comandos disponíveis. | N/A             |
 
-## 📦 Tecnologias Utilizadas
-
-- **TypeScript**: Linguagem base para maior segurança e tipagem.
-- **Urllib**: Para realizar as requisições HTTP Digest Auth aos dispositivos.
-- **Net (Socket)**: Para o escaneamento de portas de rede.
-- **Dotenv**: Gestão de variáveis de ambiente.
+---

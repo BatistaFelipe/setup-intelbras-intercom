@@ -1,5 +1,8 @@
 import net from "net";
-import { DefaultResponse } from "./types.js";
+import { DefaultResponse } from "../types.js";
+import { promisesLimit, UnknownError } from "../utils.js";
+
+const pLimit = promisesLimit();
 
 // testa se a porta do host está aberta
 const scanPort = (
@@ -31,11 +34,9 @@ const scanPort = (
         socket.destroy();
         resolve({ message: `${host}:${port} Timeout`, success: false });
       });
-    } catch (error: any) {
-      resolve({
-        message: error.message || "Erro desconhecido",
-        success: false,
-      });
+    } catch (error: unknown) {
+      const customError = new UnknownError(error);
+      return customError.toJSON();
     }
   });
 };
@@ -51,7 +52,7 @@ const scanPortList = async (
     (_, i) => startPort + i,
   );
 
-  const promises = portRange.map((port) => scanPort(host, port));
+  const promises = portRange.map((port) => pLimit(() => scanPort(host, port)));
   const results = await Promise.all(promises);
 
   const openPorts = results.filter((r) => r.success).map((r) => r.message);
