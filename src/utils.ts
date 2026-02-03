@@ -1,6 +1,7 @@
-import fs from "fs/promises";
+import fs, { readFile } from "fs/promises";
 import winston, { Logger } from "winston";
 import pLimit from "p-limit";
+import { DefaultResponse, HostConfig, FileData } from "./types.js";
 
 const myFormat = winston.format.printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
@@ -49,3 +50,20 @@ export const saveToFile = async (filename: string, data: string) => {
     return customError.toJSON();
   }
 };
+
+export async function readHostsFile(
+  filename: string,
+): Promise<DefaultResponse> {
+  try {
+    const fileData: string = await readFile(filename, "utf-8");
+
+    return {
+      message: fileData,
+      success: true,
+    };
+  } catch (error: unknown) {
+    const customError = new UnknownError(error);
+
+    return customError.toJSON();
+  }
+}
