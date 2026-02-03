@@ -8,8 +8,8 @@ import { Command } from "commander";
 
 const program = new Command();
 
-program.option("-d, --dst-host <string>", "Destination host");
-program.option("-r, --read-file", "Read hosts from file ./data/hosts.json");
+program.option("-d, --dst-host <string>", "set destination host");
+program.option("-r, --read-file", "read hosts from file ./data/hosts.json");
 program.parse(process.argv);
 const options = program.opts();
 
