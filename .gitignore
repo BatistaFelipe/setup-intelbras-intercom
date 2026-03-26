@@ -2,6 +2,7 @@
 data/*.json
 data/*.log
 docs/*
+.claude/
 
 # Logs
 logs

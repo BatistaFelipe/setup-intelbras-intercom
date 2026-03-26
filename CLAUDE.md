@@ -72,7 +72,7 @@ docs/
 import { queryCondominium, queryDevice } from 'setup-sip-timeout-intercom/inventory'
 
 const result = await queryCondominium({
-  host: 'ddns.example.codeseg.io',
+  host: 'ddns.example.com',
   startPort: 8084,
   endPort: 8099,
   credentials: {

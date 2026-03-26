@@ -9,7 +9,7 @@ import {
 
 describe("validateHost", () => {
   it("accepts a valid hostname", () => {
-    expect(() => validateHost("ddns.example.codeseg.io")).not.toThrow();
+    expect(() => validateHost("ddns.example.com")).not.toThrow();
   });
 
   it("accepts a valid IP address", () => {

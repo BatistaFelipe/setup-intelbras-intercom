@@ -31,7 +31,7 @@ npm run dev -- -r -a                      # Configure + set auto-reboot (Intelbr
 ### Device Inventory (new)
 
 ```bash
-npm run dev -- -i -d ddns.example.io     # Query inventory for single host
+npm run dev -- -i -d ddns.example.com     # Query inventory for single host
 npm run dev -- -i -r                      # Query inventory for all hosts
 ```
 
@@ -55,7 +55,7 @@ import { queryCondominium, queryDevice } from 'setup-sip-timeout-intercom/invent
 
 // Query all devices at a condominium
 const result = await queryCondominium({
-  host: 'ddns.example.codeseg.io',
+  host: 'ddns.example.com',
   startPort: 8084,
   endPort: 8099,
   credentials: {
@@ -66,7 +66,7 @@ const result = await queryCondominium({
 
 // Query a single known device
 const device = await queryDevice({
-  address: 'ddns.example.codeseg.io:8084',
+  address: 'ddns.example.com:8084',
   credentials: {
     intelbras: { user: 'admin', password: 'secret' },
     hikvision: { user: 'admin', password: 'secret' },
@@ -111,7 +111,7 @@ docs/
 
 ```json
 {
-  "hosts": ["ddns.condo1.codeseg.io", "ddns.condo2.codeseg.io"]
+  "hosts": ["ddns.condo1.example.com", "ddns.condo2.example.com"]
 }
 ```
 

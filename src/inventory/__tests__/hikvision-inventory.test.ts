@@ -20,7 +20,7 @@ const FIXTURES = {
     <Standard>
       <enabled>true</enabled>
       <registerStatus>true</registerStatus>
-      <proxy>sip.codeseg2.tecnorise.com</proxy>
+      <proxy>sip.example.com</proxy>
       <proxyPort>7060</proxyPort>
       <userName>1458</userName>
       <displayName>1458</displayName>
