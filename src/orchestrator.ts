@@ -1,4 +1,4 @@
-import { log } from "./utils.js";
+import { log, sanitizeLogMessage } from "./utils.js";
 import {
   DefaultResponse,
   HostConfig,
@@ -15,7 +15,7 @@ export async function runGetConfig(
   const result: DefaultResponse = await object.getConfigSip(openPorts);
   if (!result.success) {
     log.error(
-      `GET_CONFIG ${host}: Failed to fetch SIP config - ${result.message}`,
+      `GET_CONFIG ${host}: Failed to fetch SIP config - ${sanitizeLogMessage(result.message)}`,
     );
     return [];
   }
@@ -33,7 +33,7 @@ export async function runSetConfig(
   const result: DefaultResponse = await object.setTimeoutSip(configs);
   if (!result.success) {
     log.error(
-      `SET_TIMEOUT_SIP ${host}: Failed to configure device - ${result.message}`,
+      `SET_TIMEOUT_SIP ${host}: Failed to configure device - ${sanitizeLogMessage(result.message)}`,
     );
     return;
   }
@@ -60,7 +60,7 @@ export async function runSetAutoMaintainReboot(
   const result: DefaultResponse = await object.setAutoMaintainReboot(configs);
   if (!result.success) {
     log.error(
-      `SET_AUTO_MAINTAIN_REBOOT ${host}: Failed to configure device - ${result.message}`,
+      `SET_AUTO_MAINTAIN_REBOOT ${host}: Failed to configure device - ${sanitizeLogMessage(result.message)}`,
     );
     return;
   }

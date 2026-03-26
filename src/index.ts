@@ -9,6 +9,7 @@ import {
   validateHost,
   validatePortRange,
   getRequiredEnv,
+  getDeviceProtocol,
 } from "./utils.js";
 import {
   runGetConfig,
@@ -44,7 +45,16 @@ const options = program.opts();
       log.error("Invalid hosts file: missing 'hosts' array");
       process.exit(1);
     }
-    hosts = parsed.hosts.map((h) => (typeof h === "string" ? h : h.host));
+    hosts = parsed.hosts.map((h, index) => {
+      if (typeof h === "string") {
+        if (!h) throw new Error(`Invalid hosts file entry at index ${index}: empty string`);
+        return h;
+      }
+      if (h && typeof h === "object" && typeof h.host === "string" && h.host) {
+        return h.host;
+      }
+      throw new Error(`Invalid hosts file entry at index ${index}`);
+    });
   }
 
   for (const host of hosts) {
@@ -54,6 +64,8 @@ const options = program.opts();
   const startPort = Number(process.env.START_PORT || 8084);
   const endPort = Number(process.env.END_PORT || 8099);
   validatePortRange(startPort, endPort);
+
+  const protocol = getDeviceProtocol();
 
   try {
     if (options.info) {
@@ -74,6 +86,7 @@ const options = program.opts();
           startPort,
           endPort,
           credentials,
+          protocol,
         });
         console.log(JSON.stringify(inventory, null, 2));
       }
@@ -85,6 +98,11 @@ const options = program.opts();
       const { hosts: openPorts } = JSON.parse(scanResult.message) as {
         hosts: string[];
       };
+
+      for (const port of openPorts) {
+        validateHost(port);
+      }
+
       log.info(
         `SCAN_PORTS ${address}: Found ${openPorts.length} open port(s)`,
       );

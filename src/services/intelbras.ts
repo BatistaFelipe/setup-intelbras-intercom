@@ -6,6 +6,7 @@ import {
   UnknownError,
   getRequiredEnv,
   getRequiredNumberEnv,
+  getDeviceProtocol,
   log,
 } from "../utils.js";
 
@@ -29,7 +30,7 @@ const getConfigSip = async (hosts: string[]): Promise<DefaultResponse> => {
     const promises = hosts.map((address) =>
       pLimit(async () => {
         try {
-          const url = `http://${address}/cgi-bin/configManager.cgi?action=getConfig&name=SIP.RegExpiration`;
+          const url = `${getDeviceProtocol()}://${address}/cgi-bin/configManager.cgi?action=getConfig&name=SIP.RegExpiration`;
           const { data, res } = await request(url, {
             ...options,
             method: "GET",
@@ -80,7 +81,7 @@ const setTimeoutSip = async (
         if (host.sipTimeout !== SIP_TIMEOUT) {
           const address = host.host;
           const encodedTimeout = encodeURIComponent(String(SIP_TIMEOUT));
-          const url = `http://${address}/cgi-bin/configManager.cgi?action=setConfig&SIP.RegExpiration=${encodedTimeout}`;
+          const url = `${getDeviceProtocol()}://${address}/cgi-bin/configManager.cgi?action=setConfig&SIP.RegExpiration=${encodedTimeout}`;
           const { data, res } = await request(url, {
             ...options,
             method: "GET",
@@ -125,7 +126,7 @@ const setAutoMaintainReboot = async (
           `AutoMaintain.AutoRebootEnable=${encodeURIComponent(String(AUTOREBOOTENABLE))}`,
           `AutoMaintain.AutoRebootHour=${encodeURIComponent(String(AUTOREBOOTHOUR))}`,
         ].join("&");
-        const url = `http://${address}/cgi-bin/configManager.cgi?action=setConfig&${params}`;
+        const url = `${getDeviceProtocol()}://${address}/cgi-bin/configManager.cgi?action=setConfig&${params}`;
         const { data, res } = await request(url, {
           ...options,
           method: "GET",

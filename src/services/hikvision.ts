@@ -8,6 +8,7 @@ import {
   UnknownError,
   getRequiredEnv,
   getRequiredNumberEnv,
+  getDeviceProtocol,
   log,
 } from "../utils.js";
 
@@ -24,7 +25,7 @@ const getConfigSip = async (hosts: string[]): Promise<DefaultResponse> => {
     const promises = hosts.map((address) =>
       pLimit(async () => {
         try {
-          const url = `http://${address}/ISAPI/System/Network/SIP`;
+          const url = `${getDeviceProtocol()}://${address}/ISAPI/System/Network/SIP`;
           const { data, res } = await request(url, {
             ...options,
             method: "GET",
@@ -102,7 +103,7 @@ const setTimeoutSip = async (
       pLimit(async () => {
         if (Number(host.sipTimeout) !== SIP_TIMEOUT) {
           const address = host.host;
-          const url = `http://${address}/ISAPI/System/Network/SIP`;
+          const url = `${getDeviceProtocol()}://${address}/ISAPI/System/Network/SIP`;
           const body = postXmlBody(host.extension!);
 
           const { data, res } = await request(url, {
