@@ -1,6 +1,7 @@
 # my stuff
 data/*.json
 data/*.log
+docs/*
 
 # Logs
 logs
